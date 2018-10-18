@@ -24,20 +24,27 @@ void UdpServer::readPendingDatagrams()
         datagram.resize(m_UdpSocket->pendingDatagramSize());
         m_UdpSocket->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
     }
-     QString data(datagram.constData());
-     if(QString::compare(data,"login",Qt::CaseInsensitive)==0){
+    QString data(datagram.constData());
+    if(QString::compare(data,"login",Qt::CaseInsensitive)==0){
         qDebug()<<sender.toString()<<"connect to server,listen on port"<<senderPort;
         qDebug()<<clientList.size();
         clientList.append(qMakePair(sender,senderPort));
         qDebug()<<clientList.size();
-     }else{
-         foreach (auto client, clientList) {
-             if(client.first!=sender||client.second!=senderPort)
-             {
+    }
+    else if(QString::compare(data,"logout",Qt::CaseInsensitive)==0){
+        qDebug()<<sender.toString()<<"logout";
+        qDebug()<<clientList.size();
+        clientList.removeOne(qMakePair(sender,senderPort));
+        qDebug()<<clientList.size();
+    }
+    else{
+        foreach (auto client, clientList) {
+            if(client.first!=sender||client.second!=senderPort)
+            {
                 m_UdpSocket->writeDatagram(datagram,datagram.size(),client.first,client.second);
-             }
-         }
-     }
+            }
+        }
+    }
 }
 
 

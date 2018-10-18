@@ -5,6 +5,9 @@
 #include <QtNetwork/QUdpSocket>
 #include <QList>
 #include <QPair>
+#include <QMap>
+
+#include <map>
 
 class UdpServer:public QObject
 {
@@ -19,7 +22,9 @@ private:
     QUdpSocket *m_UdpSocket;
 
 
-    QList<QPair<QHostAddress,quint16>> clientList;
+  QList<QPair<QHostAddress,quint16>> clientList;
+//    QMap<QHostAddress,quint16> clientMap;
+
 };
 
 #endif // UDPSERVER_H
